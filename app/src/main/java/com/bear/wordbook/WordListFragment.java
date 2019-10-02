@@ -1,5 +1,7 @@
 package com.bear.wordbook;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bear.wordbook.model.Word;
 
@@ -24,34 +27,64 @@ public class WordListFragment extends Fragment implements AdapterView.OnItemClic
 
     public static ArrayAdapter<String> adapter;
 
-    private List<Word> words = new ArrayList<>();   // 存储数据库中单词的信息
+    public static List<Word> words = new ArrayList<>();   // 存储数据库中单词的信息
 
-    private String[] wordList;   // 存储用于显示在listview上的信息
+    public static List<String> wordList = new ArrayList<>();   // 存储用于显示在listview上的信息
+
+    private ListView listView;          // 单词列表
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.word_list_fragmentt, container, false);
 
-        String[] wordList = getWordList();
+        getWordList();
 
-        ListView listView = view.findViewById(R.id.word_list);
+        listView = view.findViewById(R.id.word_list);
         adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, wordList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
+
+        // 长按删除
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity());
+                dialog.setTitle("警告")
+                        .setMessage("确定删除该单词?")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LitePal.deleteAll(Word.class, "english = ?", words.get(position).getEnglish());
+                                Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+                                adapter.notifyDataSetChanged();
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+                return true;
+            }
+        });
         return view;
     }
 
     // 获取单词列表
-    private String[] getWordList(){
+    private void getWordList(){
+        if (!wordList.isEmpty()){
+            wordList.clear();
+        }
         LitePal.getDatabase();  // 创建数据库
         words = LitePal.findAll(Word.class);
-        wordList = new String[words.size()];
         for (int i = 0; i < words.size(); i++){
-            wordList[i] = words.get(i).getEnglish() + "  " + words.get(i).getChinese();
+            wordList.add(words.get(i).getEnglish() + "  " + words.get(i).getChinese());
         }
-        return wordList;
     }
 
     @Override

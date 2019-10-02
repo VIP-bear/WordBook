@@ -10,9 +10,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Design">
-        <activity android:name=".WordActivity"></activity>
+        <activity android:name=".SearchActivity" />
+
+        <activity android:name=".WordActivity" />
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +23,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name=".WordContentProvider"
+            android:authorities="com.bear.wordbook.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

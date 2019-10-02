@@ -11,14 +11,14 @@
         android:text="例句"
         android:textSize="32sp"/>
 
-    <TextView
+    <EditText
         android:id="@+id/en_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:textSize="28sp"/>
 
-    <TextView
+    <EditText
         android:id="@+id/zh_example"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

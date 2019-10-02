@@ -10,6 +10,8 @@ import android.widget.Toast;
 
 import com.bear.wordbook.model.Word;
 
+import org.litepal.LitePal;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -68,7 +70,8 @@ public class AddWordFragment extends Fragment implements View.OnClickListener{
                 String chEx = chineseExample.getText().toString();
 
                 if (!en.equals("") && !ch.equals("") && !enEx.equals("")
-                        && !chEx.equals("")) {
+                        && !chEx.equals("") && !LitePal.isExist(Word.class, "english = ?", en)) {
+                    // 输入都不为空且单词不存在则保存单词
                     Word word = new Word();
                     word.setEnglish(en);
                     word.setChinese(ch);

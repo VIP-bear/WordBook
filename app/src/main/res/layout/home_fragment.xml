@@ -5,30 +5,24 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/search"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#363535"
-        android:padding="5dp"
-        android:layout_margin="5dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+        android:layout_marginLeft="150dp"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/input"
-            android:layout_width="80dp"
-            android:layout_height="45dp"
-            android:background="#ffffff"
-            android:layout_weight="1"/>
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/search"/>
 
-        <Button
-            android:id="@+id/search"
-            android:layout_width="50dp"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_marginLeft="5dp"
-            android:text="搜索"
-            android:textSize="24sp"
-            android:background="#363535"/>
+            android:text="查词"
+            android:textSize="20sp"
+            android:gravity="center_vertical"/>
 
     </LinearLayout>
 
