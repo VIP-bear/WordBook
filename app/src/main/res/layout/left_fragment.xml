@@ -23,14 +23,20 @@
             android:textSize="32sp"/>
 
         <ImageButton
-            android:id="@+id/pronunciation"
+            android:id="@+id/word_pronunciation"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/word_volume"
+            android:layout_marginLeft="10dp"/>
 
-        <ImageButton
+        <TextView
             android:id="@+id/collect"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="+生词本"
+            android:background="@color/colletc_unchecked"
+            android:textSize="22sp"
+            android:layout_marginLeft="20dp"/>
 
     </LinearLayout>
 

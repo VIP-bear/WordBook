@@ -2,8 +2,10 @@ package com.bear.wordbook;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +15,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bear.wordbook.model.Word;
+import com.iflytek.cloud.RecognizerResult;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+import com.iflytek.cloud.SpeechUtility;
+import com.iflytek.cloud.ui.RecognizerDialog;
+import com.iflytek.cloud.ui.RecognizerDialogListener;
 
 import org.litepal.LitePal;
+
+import java.util.Locale;
+
+import static com.bear.wordbook.NewWordsFragment.newWordAdapter;
+import static com.bear.wordbook.WordListFragment.adapter;
+import static com.iflytek.cloud.VerifierResult.TAG;
 
 public class WordActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -32,11 +46,19 @@ public class WordActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button change;          // 提交修改
 
+    private ImageButton wordPro;    // 单词发音
+
+    private ImageButton englishPro; // 语句发音
+
+    private TextView collect;       // 收藏
+
     private int orientation;        // 记录横竖屏的值
 
-    private Word word;
+    private Word word = new Word();
 
     private static final String TAG = "WordActivity";
+
+    private TextToSpeech textToSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +76,35 @@ public class WordActivity extends AppCompatActivity implements View.OnClickListe
         setListerner();
         showWord(word);
 
+        // 如果是生词则将收藏按钮变色
+        if (word.getFlag() == 1){
+            collect.setBackgroundResource(R.color.colletc_checked);
+        }else {
+            collect.setBackgroundResource(R.color.colletc_unchecked);
+        }
+
         // 设置文本不可编辑和点击
         editText(false);
+
+        // 语言处理
+        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS){
+                    int result = textToSpeech.setLanguage(Locale.US);
+                    if (result == TextToSpeech.LANG_MISSING_DATA ||
+                            result == TextToSpeech.LANG_NOT_SUPPORTED){
+                        wordPro.setEnabled(false);
+                        englishPro.setEnabled(false);
+                    }else {
+                        wordPro.setEnabled(true);
+                        englishPro.setEnabled(true);
+                    }
+                }else {
+                    Log.e("TAG", "Could not initialize TextToSpeech.");
+                }
+            }
+        });
     }
 
     // 寻找各个控件
@@ -70,14 +119,21 @@ public class WordActivity extends AppCompatActivity implements View.OnClickListe
         enExample = findViewById(R.id.en_example);
         zhExample = findViewById(R.id.zh_example);
         back = findViewById(R.id.back);
-
+        wordPro = findViewById(R.id.word_pronunciation);
+        englishPro = findViewById(R.id.english_pronunciation);
+        collect = findViewById(R.id.collect);
     }
 
     // 设置监听器
     private void setListerner(){
-        edit.setOnClickListener(this);
-        change.setOnClickListener(this);
+        if (orientation == 1) {
+            edit.setOnClickListener(this);
+            change.setOnClickListener(this);
+        }
         back.setOnClickListener(this);
+        wordPro.setOnClickListener(this);
+        englishPro.setOnClickListener(this);
+        collect.setOnClickListener(this);
     }
 
     // 显示单词
@@ -140,8 +196,47 @@ public class WordActivity extends AppCompatActivity implements View.OnClickListe
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case R.id.word_pronunciation:
+                if (textToSpeech != null && !textToSpeech.isSpeaking()){
+                    textToSpeech.setPitch(1.0f);    // 音量
+                    textToSpeech.speak(wordEnglish.getText().toString(),
+                            TextToSpeech.QUEUE_FLUSH, null);
+                }
+                break;
+            case R.id.english_pronunciation:
+                if (textToSpeech != null && !textToSpeech.isSpeaking()){
+                    textToSpeech.setPitch(1.0f);    // 音量
+                    textToSpeech.speak(enExample.getText().toString(),
+                            TextToSpeech.QUEUE_FLUSH, null);
+                }
+                break;
+            case R.id.collect:
+                if (word.getFlag() == 1){
+                    word.setFlag(0);
+                    collect.setBackgroundResource(R.color.colletc_unchecked);
+                }else {
+                    word.setFlag(1);
+                    collect.setBackgroundResource(R.color.colletc_checked);
+                }
+                break;
             default:
                 break;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ContentValues values = new ContentValues();
+        values.put("flag", word.getFlag());
+        LitePal.updateAll(Word.class, values, "english = ?", word.getEnglish());
+        WordListFragment.update();
+        if (textToSpeech != null){
+            // 停止TextToSpeech
+            textToSpeech.stop();
+            // 释放它占用的资源
+            textToSpeech.shutdown();
+        }
+    }
+
 }

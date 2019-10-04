@@ -5,24 +5,31 @@
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="150dp"
         android:orientation="horizontal">
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/search_word"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/search"/>
+            android:background="@drawable/search"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
-            android:layout_marginLeft="5dp"
-            android:text="查词"
-            android:textSize="20sp"
-            android:gravity="center_vertical"/>
+        <ImageButton
+            android:id="@+id/volume"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/volume"/>
+
+        <ImageButton
+            android:id="@+id/help"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="40dp"
+            android:background="@drawable/help"/>
+
 
     </LinearLayout>
 

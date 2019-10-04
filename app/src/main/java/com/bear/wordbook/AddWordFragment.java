@@ -77,6 +77,7 @@ public class AddWordFragment extends Fragment implements View.OnClickListener{
                     word.setChinese(ch);
                     word.setEnglishExample(enEx);
                     word.setChineseExample(chEx);
+                    word.setFlag(0);
                     word.save();
                     clearText();
                     Toast.makeText(getContext(), "保存成功",

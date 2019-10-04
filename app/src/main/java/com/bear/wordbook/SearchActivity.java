@@ -7,15 +7,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
-
 import com.bear.wordbook.model.Word;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import static com.bear.wordbook.WordListFragment.words;
 
@@ -24,6 +21,8 @@ public class SearchActivity extends AppCompatActivity {
     private SearchView searchView;
 
     private ListView listView;
+
+    private ImageButton microphone;     // 麦克风
 
     private List<String> mList = new ArrayList<>();
 
@@ -84,5 +83,8 @@ public class SearchActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
+
+
 }

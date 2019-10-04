@@ -14,6 +14,15 @@ public class Word extends LitePalSupport implements Serializable {
 
     private String chineseExample;     // 中文例句
 
+    private int flag;       // 0表示不是生词，1是
+
+    public int getFlag() {
+        return flag;
+    }
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     public String getEnglish() {
         return english;

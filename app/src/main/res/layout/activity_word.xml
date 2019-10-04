@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#111111"
         android:orientation="horizontal">
 
         <ImageButton
@@ -36,17 +37,24 @@
             android:id="@+id/word_english"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:textSize="32sp"/>
 
         <ImageButton
-            android:id="@+id/pronunciation"
+            android:id="@+id/word_pronunciation"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:background="@drawable/word_volume"
+            android:layout_marginLeft="10dp"/>
 
-        <ImageButton
+        <TextView
             android:id="@+id/collect"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:text="+生词本"
+            android:background="@color/colletc_unchecked"
+            android:textSize="22sp"
+            android:layout_marginLeft="20dp"/>
 
     </LinearLayout>
 
@@ -62,16 +70,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="例句"
+        android:layout_marginLeft="10dp"
+        android:text="例句:"
         android:textSize="28sp"/>
-
-    <EditText
-        android:id="@+id/en_example"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
-        android:textSize="28sp"/>
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/en_example"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:textSize="28sp"/>
+        <ImageButton
+            android:id="@+id/english_pronunciation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/english_volume"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/zh_example"

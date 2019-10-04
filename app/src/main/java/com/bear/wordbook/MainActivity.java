@@ -3,25 +3,14 @@ package com.bear.wordbook;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import com.bear.wordbook.model.Word;
-import com.bear.wordbook.translate.demo.TransApi;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.gson.Gson;
+
+import org.litepal.LitePal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +32,10 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // 创建数据库
+        LitePal.getDatabase();
+
 
         // 隐藏标题栏
         if (getSupportActionBar() != null){
@@ -81,7 +74,8 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onPageSelected(int position) {
-                WordListFragment.adapter.notifyDataSetChanged();
+                WordListFragment.update();
+                NewWordsFragment.update();
                 if (menuItem != null){
                     menuItem.setChecked(false);
                 }else {
@@ -101,7 +95,7 @@ public class MainActivity extends AppCompatActivity{
         list.add(new HomeFragment());
         list.add(new AddWordFragment());
         list.add(new TranslationFragment());
-        list.add(new RightFragment());
+        list.add(new NewWordsFragment());
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         viewPagerAdapter.setList(list);
         viewPager.setAdapter(viewPagerAdapter);

@@ -5,4 +5,6 @@
     <color name="colorAccent">#D81B60</color>
     <color name="tab_checked">#ED6A2C</color>
     <color name="tab_unchecked">#ffffff</color>
+    <color name="colletc_checked">#FFC107</color>
+    <color name="colletc_unchecked">#747372</color>
 </resources>

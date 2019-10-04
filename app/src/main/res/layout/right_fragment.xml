@@ -11,12 +11,25 @@
         android:text="例句"
         android:textSize="32sp"/>
 
-    <EditText
-        android:id="@+id/en_example"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:textSize="28sp"/>
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/en_example"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="5dp"
+            android:textSize="28sp"/>
+        <ImageButton
+            android:id="@+id/english_pronunciation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/english_volume"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/zh_example"

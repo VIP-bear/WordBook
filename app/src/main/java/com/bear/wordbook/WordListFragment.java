@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import static com.bear.wordbook.NewWordsFragment.newWordAdapter;
+import static com.iflytek.cloud.VerifierResult.TAG;
+
 public class WordListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     public static ArrayAdapter<String> adapter;
@@ -41,7 +45,7 @@ public class WordListFragment extends Fragment implements AdapterView.OnItemClic
         getWordList();
 
         listView = view.findViewById(R.id.word_list);
-        adapter = new ArrayAdapter<String>(getActivity(),
+        adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_list_item_1, wordList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(this);
@@ -58,7 +62,7 @@ public class WordListFragment extends Fragment implements AdapterView.OnItemClic
                             public void onClick(DialogInterface dialog, int which) {
                                 LitePal.deleteAll(Word.class, "english = ?", words.get(position).getEnglish());
                                 Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
-                                adapter.notifyDataSetChanged();
+                                update();
                                 dialog.dismiss();
                             }
                         })
@@ -76,11 +80,9 @@ public class WordListFragment extends Fragment implements AdapterView.OnItemClic
     }
 
     // 获取单词列表
-    private void getWordList(){
-        if (!wordList.isEmpty()){
-            wordList.clear();
-        }
-        LitePal.getDatabase();  // 创建数据库
+    public static void getWordList(){
+        wordList.clear();
+        words.clear();
         words = LitePal.findAll(Word.class);
         for (int i = 0; i < words.size(); i++){
             wordList.add(words.get(i).getEnglish() + "  " + words.get(i).getChinese());
@@ -93,5 +95,13 @@ public class WordListFragment extends Fragment implements AdapterView.OnItemClic
         Intent intent = new Intent(getContext(), WordActivity.class);
         intent.putExtra("word", word);
         startActivity(intent);
+    }
+
+    // 刷新界面
+    public static void update(){
+        getWordList();
+        if (!wordList.isEmpty()) {
+            adapter.notifyDataSetChanged();
+        }
     }
 }
